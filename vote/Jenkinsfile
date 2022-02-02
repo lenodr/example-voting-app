@@ -1,56 +1,44 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.4-jdk-8'
-            args '-v $HOME/.m2/root/.m2'
+            image 'python:alpine'
+            args '--user root'
         }
     }
 
     stages {
         stage('build') {
             when { 
-                changeset "**/worker/**" 
+                changeset "**/vote/**" 
             }
             steps {
-                echo 'Compile worker app'
-                dir('worker') {
-                    sh 'mvn compile'
+                echo 'Compile vote app'
+                dir('vote') {
+                    sh 'pip install -r requirements.txt'
                 }
                 
             }
         }
         stage('test') {
             when { 
-                changeset "**/worker/**" 
+                changeset "**/vote/**" 
             }
             steps {
-                echo 'Running Unit Tests on Worker app'
-                dir('worker') {
-                    sh 'mvn clean test'
+                echo 'Running Unit Tests on vote app'
+                dir('vote') {
+                    sh 'nosettest -v'
                 }
             }
         }
-        stage('package') {
-            when { 
-                branch "master"
-                changeset "**/worker/**" 
-            }
-            steps {
-                echo 'Packaging worker app'
-                dir('worker') {
-                    sh 'mvn package -DskipTests'
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                }
-            }
-        }
+        
     }
     post {
         always {
-            echo 'Pipline for worker is complete...'
+            echo 'Pipline for vote is complete...'
         }
         failure {
             office365ConnectorSend webhookUrl: 'https://venturecorporate.webhook.office.com/webhookb2/07e4c0f5-3d39-4dce-99a6-a04e14e2de3a@0a34c976-4d3f-4f45-93c4-6f7932cf637d/IncomingWebhook/eaee1e4279dd40aeaca768a4a00bb86f/76a2818f-6409-4b87-b582-8b4a7d0a9826',
-                message: 'The building process failed so hard I cant even tell you right now',
+                message: "The building process failed so hard I cant even tell you right now - ${env.JOB_NAME} ${env.BUILD_NUMBER}",
                 status: 'Failed'
         }
         success {
