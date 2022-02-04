@@ -33,7 +33,7 @@ pipeline {
                 echo 'Running Unit Tests on vote app'
                 dir('vote') {
                     sh 'pip install -r requirements.txt'
-                    sh 'nosettest -v'
+                    sh 'nosetest -v'
                 }
             }
         }
