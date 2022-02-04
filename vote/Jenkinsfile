@@ -4,7 +4,7 @@ pipeline {
         stage('build') {
             agent {
                 docker {
-                    image 'python:alpine'
+                    image 'python:2.7.16-slim'
                     args '--user root'
                 }
             }
@@ -22,7 +22,7 @@ pipeline {
         stage('test') {
             agent {
                 docker {
-                    image 'python:alpine'
+                    image 'python:2.7.16-slim'
                     args '--user root'
                 }
             }
