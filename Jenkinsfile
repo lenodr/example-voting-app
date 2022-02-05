@@ -262,7 +262,7 @@ pipeline {
     }
 
     success {
-        echo :)
+        echo ":)"
       //office365ConnectorSend(webhookUrl: 'https://venturecorporate.webhook.office.com/webhookb2/07e4c0f5-3d39-4dce-99a6-a04e14e2de3a@0a34c976-4d3f-4f45-93c4-6f7932cf637d/IncomingWebhook/eaee1e4279dd40aeaca768a4a00bb86f/76a2818f-6409-4b87-b582-8b4a7d0a9826', message: 'OMG youre such a pro! The build was a complete success', status: 'Success')
     }
 
