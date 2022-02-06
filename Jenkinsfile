@@ -190,7 +190,7 @@ pipeline {
       steps {
         echo 'Running integration Tests on vote app'
         dir(path: 'vote') {
-          sh 'integration_test.sh'
+          sh './integration_test.sh'
         }
       }
     }
@@ -213,6 +213,15 @@ pipeline {
       }
     }
 
+    stage('E2E user test') {
+      agent any
+      when { 
+        branch "master"
+      }
+      steps {
+            sh './e2e.sh'
+      }
+    }
     stage('Sonarqube') {
       agent any
       //when{
@@ -240,6 +249,7 @@ pipeline {
     //        }
     //    }
     //}
+
     stage('Deploy to DEV') {
       agent any
       when { 
